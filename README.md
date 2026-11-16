@@ -105,7 +105,6 @@ For every tracked person:
 | Video Processing | OpenCV |
 | Experiment Tracking | MLflow |
 | Testing | Pytest |
-| Version Control | Git + GitHub |
 
 ---
 

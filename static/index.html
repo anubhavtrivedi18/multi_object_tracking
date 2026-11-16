@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TrajectoryGuard</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">
+                    TG
+                </div>
+
+                <div>
+                    <h1>TrajectoryGuard</h1>
+                    <p>AI Movement Analysis</p>
+                </div>
+            </div>
+
+
+            <div class="sidebar-section">
+
+                <p class="section-title">
+                    PROCESSING MODE
+                </p>
+
+                <button
+                    id="recordedModeBtn"
+                    class="mode-btn active"
+                >
+                    <span>🎬</span>
+                    Recorded Video
+                </button>
+
+                <button
+                    id="cameraModeBtn"
+                    class="mode-btn"
+                >
+                    <span>📷</span>
+                    Live Camera
+                </button>
+
+            </div>
+
+
+            <div class="sidebar-section">
+
+                <p class="section-title">
+                    PIPELINE
+                </p>
+
+                <div class="pipeline">
+
+                    <div class="pipeline-item">
+                        <span class="pipeline-number">01</span>
+                        <div>
+                            <strong>YOLOv8</strong>
+                            <small>Person Detection</small>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-line"></div>
+
+                    <div class="pipeline-item">
+                        <span class="pipeline-number">02</span>
+                        <div>
+                            <strong>ByteTrack</strong>
+                            <small>Object Tracking</small>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-line"></div>
+
+                    <div class="pipeline-item">
+                        <span class="pipeline-number">03</span>
+                        <div>
+                            <strong>LSTM</strong>
+                            <small>Trajectory Prediction</small>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-line"></div>
+
+                    <div class="pipeline-item">
+                        <span class="pipeline-number">04</span>
+                        <div>
+                            <strong>Anomaly</strong>
+                            <small>Movement Analysis</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="sidebar-footer">
+
+                <div class="status-dot"></div>
+
+                <div>
+                    <strong>System Ready</strong>
+                    <small>FastAPI Backend</small>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ================= MAIN ================= -->
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="eyebrow">
+                        REAL-TIME COMPUTER VISION
+                    </p>
+
+                    <h2>
+                        Movement Intelligence Dashboard
+                    </h2>
+                </div>
+
+                <div class="backend-status">
+                    <span class="status-dot"></span>
+                    Backend Online
+                </div>
+
+            </header>
+
+
+            <!-- ================= MODE TITLE ================= -->
+
+            <section class="mode-header">
+
+                <div>
+
+                    <h3 id="modeTitle">
+                        Recorded Video Analysis
+                    </h3>
+
+                    <p id="modeDescription">
+                        Upload a video and analyze movement trajectories.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= RECORDED VIDEO ================= -->
+
+            <section
+                id="recordedPanel"
+                class="control-panel"
+            >
+
+                <div class="upload-area">
+
+                    <div class="upload-icon">
+                        🎬
+                    </div>
+
+                    <h3>
+                        Upload Recorded Video
+                    </h3>
+
+                    <p>
+                        Select a video to run the complete
+                        detection, tracking and trajectory pipeline.
+                    </p>
+
+                    <label
+                        for="videoInput"
+                        class="select-button"
+                    >
+                        Select Video
+                    </label>
+
+                    <input
+                        id="videoInput"
+                        type="file"
+                        accept="video/*"
+                        hidden
+                    >
+
+                    <p
+                        id="fileName"
+                        class="file-name"
+                    >
+                        No video selected
+                    </p>
+
+                    <button
+                        id="processVideoBtn"
+                        class="primary-button"
+                    >
+                        Process Video
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= LIVE CAMERA ================= -->
+
+            <section
+                id="cameraPanel"
+                class="control-panel hidden"
+            >
+
+                <div class="camera-controls">
+
+                    <div>
+
+                        <h3>
+                            Live Camera
+                        </h3>
+
+                        <p>
+                            Use your camera for real-time
+                            movement analysis.
+                        </p>
+
+                    </div>
+
+                    <div class="camera-buttons">
+
+                        <button
+                            id="startCameraBtn"
+                            class="primary-button"
+                        >
+                            Start Camera
+                        </button>
+
+                        <button
+                            id="stopCameraBtn"
+                            class="secondary-button"
+                            disabled
+                        >
+                            Stop Camera
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= VIDEO DISPLAY ================= -->
+
+            <section class="visualization-card">
+
+                <div class="visualization-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PROCESSED OUTPUT
+                        </p>
+
+                        <h3>
+                            Trajectory Visualization
+                        </h3>
+
+                    </div>
+
+                    <div
+                        id="processingStatus"
+                        class="processing-status"
+                    >
+                        Ready
+                    </div>
+
+                </div>
+
+
+                <div class="video-container">
+
+                    <!-- Recorded video processed stream -->
+
+                    <img
+                        id="processedVideo"
+                        class="processed-stream"
+                        alt="Processed video"
+                    >
+
+
+                    <!-- Live camera preview -->
+
+                    <video
+                        id="cameraPreview"
+                        class="camera-preview"
+                        autoplay
+                        playsinline
+                        muted
+                    ></video>
+
+
+                    <!-- Live processed camera frame -->
+
+                    <img
+                        id="processedCamera"
+                        class="processed-stream"
+                        alt="Processed camera"
+                    >
+
+
+                    <div
+                        id="videoPlaceholder"
+                        class="video-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ◉
+                        </div>
+
+                        <h3>
+                            No Processing Started
+                        </h3>
+
+                        <p>
+                            Select a processing mode to begin.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= LEGEND ================= -->
+
+                <div class="legend">
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot actual"></span>
+
+                        <span>
+                            Actual Position
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot predicted"></span>
+
+                        <span>
+                            Predicted Position
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot trajectory"></span>
+
+                        <span>
+                            Past Trajectory
+                        </span>
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span class="legend-dot anomaly"></span>
+
+                        <span>
+                            Anomaly
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= METRICS ================= -->
+
+            <section class="metrics-grid">
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Detection
+                    </span>
+
+                    <strong>
+                        YOLOv8n
+                    </strong>
+
+                    <small>
+                        Person detection
+                    </small>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Tracking
+                    </span>
+
+                    <strong>
+                        ByteTrack
+                    </strong>
+
+                    <small>
+                        Persistent IDs
+                    </small>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Prediction
+                    </span>
+
+                    <strong>
+                        LSTM
+                    </strong>
+
+                    <small>
+                        Future trajectory
+                    </small>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Threshold
+                    </span>
+
+                    <strong>
+                        0.0119
+                    </strong>
+
+                    <small>
+                        Anomaly threshold
+                    </small>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= EXPLANATION ================= -->
+
+            <section class="explanation-card">
+
+                <div class="explanation-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <h3>
+                        How the system works
+                    </h3>
+
+                    <p>
+                        YOLOv8 detects people, ByteTrack assigns
+                        persistent identities, and the LSTM predicts
+                        the next movement position. The difference
+                        between the actual and predicted position is
+                        used to identify unusual trajectory behavior.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script
+        src="/static/script.js"
+    ></script>
+
+</body>
+
+</html>

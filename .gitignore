@@ -20,13 +20,14 @@ mlartifacts/
 # Training outputs
 runs/
 
+# Model weights
+yolo11n.pt
+yolo26n.pt
+models/trajectory_gru.pth
+
 # Temporary videos
 temp_video.mp4
 temp_processed_video.mp4
-
-# Model weights
-*.pt
-*.pth
 
 # Python generated files
 *.log
